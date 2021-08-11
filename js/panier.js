@@ -1,36 +1,39 @@
 // declaration duuuuu variable "article Enregidtrer Panier"////////////////////function produitDePanierCommander( idProduit, quantite, priceProduit, choixFormulaire,nomProduit){
-  let mesProduit =JSON.parse(localStorage.getItem("produit"));
-  //console.log(mesProduit);
-  if (mesProduit === null){
-    console.log("panier vide ");
+  let products =JSON.parse(localStorage.getItem("products"))
+  if (products === null){
+    alert("panier vide ");
   }else{
-    for (let k=0; k<mesProduit.length; k++){      
-      addProduitStokPanier (mesProduit[k].idProduit, mesProduit[k].nomProduit, mesProduit[k].prixProduit,mesProduit[k].quantite, mesProduit[k].totalPayerProduit ); 
-      
-      }  
+    for (let k=0; k<products.length; k++){ 
+     
+      addProduitStokPanier (products[k].produits, products[k].nomProduit, products[k].prixProduit,products[k].quantite, products[k].totalPayerProduit, products[k].lentillesChoisi ); 
+    }  
+       
   };     
 /////////////////////////////////////////////////////////////////
 
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function addProduitStokPanier (idProduit, nomProduit, prixProduit, quantite, totalPayerProduit ){
-  const nouveauProduitCommander = document.createElement('div');    
-  nouveauProduitCommander.innerHTML=`
-  <div class=" row">
-    <div class="col">
-      <h6>produit selectionner</h6>
-      <div class=" row affichageNpq">        
-        <span>name : ${nomProduit}</span>
-        <span>prix U : ${prixProduit}</span>
-        <span>quantite:${quantite}</span> 
-        <span>prix:${totalPayerProduit}</span> 
+
+
+ 
+function addProduitStokPanier (idProduit, nameProduit, priceProduit, quantite, totalPayerProduit, lentillesChoisi ){
+  const nouveauProduitCommander = document.createElement('div');  
+  
+    nouveauProduitCommander.innerHTML=`
+      <div class="articleSelectionne ">
+        <div class=" row affichageNpq  d-flex flex-row justify-content-between">        
+          <span>name : ${nameProduit}</span>
+          <span>option:${lentillesChoisi}</span>
+          <span>prix : ${priceProduit}</span>
+          <span>quantite:${quantite}</span>                   
+          <span>prix total d'un produit:${totalPayerProduit}</span> 
+                    
+        </div> 
         <button class="btn-supprimer" value=${idProduit}>supprimer<i class="bi bi-trash"></i></button>
-      </div>       
-        
-    </div>
-  </div>`
+      </div> `
   document.querySelector("#block-Panier").appendChild(nouveauProduitCommander);
   
 }
+
 
 //////////////////////////////////////////////////////////////
 let btnSupprimer = document.querySelectorAll(".btn-supprimer");
@@ -39,66 +42,19 @@ console.log(btnSupprimer);
 for (let l =0; l<btnSupprimer.length; l++){
   btnSupprimer[l].addEventListener('click', (event)=> { 
     event.preventDefault();
-    let choixSupprimer = mesProduit[l].idProduit; 
-    mesProduit = mesProduit.filter(el => el.idProduit!==choixSupprimer);
-    console.log(mesProduit);  alert("etes vous sur de supprimer l'article");
-    localStorage.setItem("produit", JSON.stringify(mesProduit)); 
+    let choixSupprimer = products[l].idProduit; 
+    let lentillesChoisi =products[l].lentillesChoisi;
+    products = products.filter(el => (el.idProduit!==choixSupprimer || el.lentillesChoisi !== lentillesChoisi));
+    console.log(products);  alert("etes vous sur de supprimer l'article");
+    localStorage.setItem("produit", JSON.stringify(products)); 
+    window.location.reload();
         
   })
 
 
 }
 
-/*
-let btnSupprimer = document.querySelectorAll(".btn-supprimer");
-console.log(btnSupprimer);
-for (let l =0; l<btnSupprimer.length; l++){
-  btnSupprimer[l].addEventListener('click', (event)=> { 
-    let choixSupprimer = btnSupprimer[l].value;    
-    for (let k=0; k<mesProduit.length; k++){ 
-      if ( mesProduit[k].idProduit === choixSupprimer ){
-        localStorage.setItem("produit", JSON.stringify(mesProduit));
-        alert(" etes vous sur de supprimer cette article ") 
-        console.log("fichier supprimer");                                                    // relier la requette
-              
-      }
-    }
-    //console.log(btnSupprimer);
-  }) 
 
-}*/
-
-
-///////////////////////////////////////////////////////
-
- /*let totalPayerProduit=0;
-for (let p=0; p<mesProduit.length; p++){
-   
-  totalPayerProduit =Number(mesProduit[p].prixProduit* mesProduit[p].quantite );  
-
-  
-}
-const totalPayerProduitff = document.createElement('span');    
-  totalPayerProduitff.innerHTML=`prix total de produit : ${totalPayerProduit}`
-  document.querySelector(".affichageNpq").appendChild(totalPayerProduitff);*/
-
-
-
-
-
-//////////////////////////////////////////////////
-
-
-
-
-
-/*const nouveauBouttonSupprimer = document.createElement('button');    
-nouveauBouttonSupprimer.innerHTML=`
-  class="btn-supprimer" value=${mesProduit.idProduit}>supprimer<i class="bi bi-trash"></i> `
-nouveauBouttonSupprimer.setAttribute("class", "btn-supprimer");
-nouveauBouttonSupprimer.setAttribute("value", `${mesProduit.idProduit}`)
-document.querySelector(".affichageNpq").appendChild(nouveauBouttonSupprimer);
-console.log(btnSupprimer);*/
 
   
 
@@ -112,30 +68,35 @@ let  nouveauButtonViderPanier = `
 document.querySelector("#block-Panier").insertAdjacentHTML("beforeend",nouveauButtonViderPanier);
 // selection le id 
 nouveauButtonViderPanier = document.querySelector("#btnViderPanier");
-console.log(nouveauButtonViderPanier);
+
 //selectionner les cles des produis de localstotege
 nouveauButtonViderPanier.addEventListener("click", (e)=>{
   e.preventDefault;
   // remove pour vider le panier  
   localStorage.removeItem("produit");
   alert(" le panier a été vidé")
+  window.location.reload();
 })
 
 
 
 /////////////////////////////////////////////////////////////////////////////////
 
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 let prisTotalCalcul=[];
 
-for (let n=0; n<mesProduit.length; n++){
-        
-  let assembleLesPris =mesProduit[n].totalPayerProduit;//mesProduit[n].prixProduit;
+for (let n=0; n < products.length; n++){        
+  let assembleLesPris =products[n].totalPayerProduit;//mesProduit[n].prixProduit;
   prisTotalCalcul.push(assembleLesPris);
     
 }// addition avec reduce 
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
 const prixTattal =prisTotalCalcul.reduce(reducer) ;
-console.log(prixTattal);
 
 
 /*********************************************** */
@@ -145,11 +106,135 @@ let  calculPrixTotalPanier = `
 document.querySelector("#block-Panier").insertAdjacentHTML("beforeend",calculPrixTotalPanier);
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////le formulaire 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////le formulaire................................
+function addFormulaire (){
+  const nouveauFormulaire  = document.createElement('div');   
+  nouveauFormulaire.innerHTML=  `
+  
+  <div class="row produitSelectionner  border border-dark ">
+  <form  id="from">                    
+    <div class="form-group">
+      <label for="firstName" > firstName : </label>
+      <input type="text" id="firstName" name="firstName" pattern="^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$" required > 
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">lastName :</label>
+      <input class="form-control" type="text" id="lastName" name="lastName" pattern="^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$" required >
+    </div>
+
+    <div class="form-group">
+      <label for="address">address:</label>
+      <input class="form-control" type="text"  name="address" id="address" required>                        
+    </div>
+
+    <div class="form-group">
+      <label for="city">city:</label>
+      <input class="form-control" type="text" name="city" id="city" pattern="^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+)){1,10}$" required>
+    </div>    
+
+    <div class="form-group">
+      <label for="email">email :</label>
+      <input class="form-control" type="email" name="email" id="email" placeholder="name@example.com" requered>
+    </div>
+    <button  type="submit" id="btnEnvoyerFormulaire" name="btnEnvoyerFormulaire">confirmer votre commande </button>
+
+  </form >
+  </div>`
+                 
+           
+ 
+  document.querySelector("#block-Panier").appendChild(nouveauFormulaire);
+} 
+
+addFormulaire();
+
+/////////////////////////////////////////////////////
+//selectionner le button commander
+const nouveauEnvoyerFormulaire = document.querySelector("#btnEnvoyerFormulaire");
+
+nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
+  event.preventDefault(); 
+  
+  const contact ={
+    firstName:document.querySelector("#firstName").value,
+    lastName :document.querySelector("#lastName").value,
+    address:document.querySelector("#address").value,
+    city :document.querySelector("#city").value,    
+    email:document.querySelector("#email").value
+  };  
+
+  console.log(contact);
+  
+  localStorage.setItem("contact",JSON.stringify(contact));
+   
+  
+    const  donneEnvoyer ={
+      contact:{
+        firstName:document.querySelector("#firstName").value,
+        lastName :document.querySelector("#lastName").value,
+        address:document.querySelector("#address").value,
+        city :document.querySelector("#city").value,    
+        email:document.querySelector("#email").value
+      },
+      products,      
+    };
+    console.log(donneEnvoyer);
+    //localStorage.setItem("donneEnvoyer",JSON.stringify(donneEnvoyer));    
+   
+
+  fetch("http://localhost:3000/api/cameras/order", {
+    method: "POST",
+
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify(donneEnvoyer),
+  })  
+  .then(function(repon){    
+    console.log(repon);
+   localStorage.setItem("order", JSON.parse(repon).orderId);
+    
+  })
+  
+
+ 
+  
+ 
+
+});
+
+const dataLocaleStorage = localStorage.getItem("contact");
+    const dataLocaleStorageObjet = JSON.parse(dataLocaleStorage);
+    console.log(dataLocaleStorageObjet);
+
+    // mettre les caleur du localestorage dans les champs du formulaire 
+  
+  function remplirInpuTLocalStorage(input){
+    document.querySelector(`#${input}`).value = dataLocaleStorageObjet[input];
+  };  
+   
+  remplirInpuTLocalStorage("firstName");  
+  remplirInpuTLocalStorage ('lastName');
+  remplirInpuTLocalStorage ('address');
+  remplirInpuTLocalStorage ('city');
+  remplirInpuTLocalStorage ('email');
