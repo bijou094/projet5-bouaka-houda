@@ -1,5 +1,5 @@
 // declaration duuuuu variable "article Enregidtrer Panier"////////////////////function produitDePanierCommander( idProduit, quantite, priceProduit, choixFormulaire,nomProduit){
-  let products =JSON.parse(localStorage.getItem("products"))
+  let products =JSON.parse(localStorage.getItem("produit"))
   if (products === null){
     alert("panier vide ");
   }else{
@@ -14,7 +14,7 @@
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
- 
+/* 
 function addProduitStokPanier (idProduit, nameProduit, priceProduit, quantite, totalPayerProduit, lentillesChoisi ){
   const nouveauProduitCommander = document.createElement('div');  
   
@@ -32,10 +32,28 @@ function addProduitStokPanier (idProduit, nameProduit, priceProduit, quantite, t
       </div> `
   document.querySelector("#block-Panier").appendChild(nouveauProduitCommander);
   
+}*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// fonction pour ajouter les produit selectionner au dom
+// création est ajout des elemnet de tableau 
+
+function addProduitStokPanier (idProduit, nameProduit, priceProduit, quantite, totalPayerProduit, lentillesChoisi ){
+  const nouveauProduitCommander = document.createElement('tr');  
+  
+    nouveauProduitCommander.innerHTML=`     
+    <td  scope="row">${nameProduit}</td>
+    <td >${lentillesChoisi}</td>
+    <td >${priceProduit}</td>
+    <td >${quantite}</td>
+    <td >${totalPayerProduit}</td>
+    <td><button class="btn-supprimer" value=${idProduit}><i class="bi bi-trash"></i></button></td>      
+   `
+   
+  document.querySelector(".ligneTableau").appendChild(nouveauProduitCommander);  
 }
-
-
-//////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////boutton supprimer////////////////////////////////////////////////////////////
+// selectionner tout les 
+//supprimer le produit volu en click sur le boutton supprimer
 let btnSupprimer = document.querySelectorAll(".btn-supprimer");
 console.log(btnSupprimer);
 
@@ -47,46 +65,10 @@ for (let l =0; l<btnSupprimer.length; l++){
     products = products.filter(el => (el.idProduit!==choixSupprimer || el.lentillesChoisi !== lentillesChoisi));
     console.log(products);  alert("etes vous sur de supprimer l'article");
     localStorage.setItem("produit", JSON.stringify(products)); 
-    window.location.reload();
-        
+    window.location.reload();        
   })
-
-
 }
-
-
-
-  
-
-
-/////////////////////////////////////////boutton a vider panier ///////////////////////////////////////////////////////////////////////////
-
-//insertion
-let  nouveauButtonViderPanier = `
-<button class="btnViderPanier" id="btnViderPanier" >vider le panier</button>`;
-//button.;
-document.querySelector("#block-Panier").insertAdjacentHTML("beforeend",nouveauButtonViderPanier);
-// selection le id 
-nouveauButtonViderPanier = document.querySelector("#btnViderPanier");
-
-//selectionner les cles des produis de localstotege
-nouveauButtonViderPanier.addEventListener("click", (e)=>{
-  e.preventDefault;
-  // remove pour vider le panier  
-  localStorage.removeItem("produit");
-  alert(" le panier a été vidé")
-  window.location.reload();
-})
-
-
-
-/////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// le prix total de la commande //////////////////////////////////////
 
 let prisTotalCalcul=[];
 
@@ -98,43 +80,47 @@ for (let n=0; n < products.length; n++){
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
 const prixTattal =prisTotalCalcul.reduce(reducer) ;
 
-
-/*********************************************** */
 let  calculPrixTotalPanier = `
-<div class="calculPrixTotalPanier" id="calculPrixTotalPanier" >prix total de la commande : ${prixTattal}</div>`;
+<tr class="table-secondary ">
+<td colspan="4">prix total de la commande </td>
+<td colspan="2" class="  calculPrixTotalPanier" id="calculPrixTotalPanier"> ${prixTattal}</td>
+</tr>`;
 //button.;
-document.querySelector("#block-Panier").insertAdjacentHTML("beforeend",calculPrixTotalPanier);
+document.querySelector(".ligneTableau").insertAdjacentHTML("beforeend",calculPrixTotalPanier);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////boutton a vider panier ///////////////////////////////////////////////////////////////////////////
 
+//insertion
+let  nouveauButtonViderPanier = `
+<tr class="table-primary"  >
+<td colspan="6">
+<button class="btnViderPanier" id="btnViderPanier" >vider le panier</button></td>
+</tr>`;
+//button.;
+document.querySelector(".ligneTableau").insertAdjacentHTML("beforeend",nouveauButtonViderPanier);
+// selection le id 
+nouveauButtonViderPanier = document.querySelector("#btnViderPanier");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//selectionner les cles des produis de localstotege
+nouveauButtonViderPanier.addEventListener("click", (e)=>{
+  e.preventDefault;
+  // remove pour vider le panier 
+  localStorage.removeItem("produit"),alert(" le panier a été vidé");  
+    
+  window.location.reload();
+  
+})
 /////////////////////////////////////////////////////le formulaire................................
 function addFormulaire (){
   const nouveauFormulaire  = document.createElement('div');   
   nouveauFormulaire.innerHTML=  `
   
-  <div class="row produitSelectionner  border border-dark ">
-  <form  id="from">                    
+  
+  <form  id="from" >                    
     <div class="form-group">
       <label for="firstName" > firstName : </label>
-      <input type="text" id="firstName" name="firstName" pattern="^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$" required > 
+      <input class="form-control" type="text" id="firstName" name="firstName" pattern="^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$" required > 
     </div>
 
     <div class="form-group">
@@ -158,12 +144,10 @@ function addFormulaire (){
     </div>
     <button  type="submit" id="btnEnvoyerFormulaire" name="btnEnvoyerFormulaire">confirmer votre commande </button>
 
-  </form >
-  </div>`
-                 
-           
- 
-  document.querySelector("#block-Panier").appendChild(nouveauFormulaire);
+  </form >`      
+  
+  document.querySelector(".formil").appendChild(nouveauFormulaire);  
+  
 } 
 
 addFormulaire();
@@ -181,46 +165,39 @@ nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
     address:document.querySelector("#address").value,
     city :document.querySelector("#city").value,    
     email:document.querySelector("#email").value
-  };  
+  };
 
   console.log(contact);
   
-  localStorage.setItem("contact",JSON.stringify(contact));
-   
-  
+  localStorage.setItem("contact",JSON.stringify(contact));  
+  // le dossier a envoyer avec la requette
     const  donneEnvoyer ={
       contact:{
-        firstName:document.querySelector("#firstName").value,
+         firstName :document.querySelector("#firstName").value,
         lastName :document.querySelector("#lastName").value,
         address:document.querySelector("#address").value,
         city :document.querySelector("#city").value,    
         email:document.querySelector("#email").value
       },
-      products,      
+      products,    
     };
     console.log(donneEnvoyer);
-    //localStorage.setItem("donneEnvoyer",JSON.stringify(donneEnvoyer));    
+    localStorage.setItem("donneEnvoyer",JSON.stringify(donneEnvoyer));    
    
-
+// la requette 
   fetch("http://localhost:3000/api/cameras/order", {
     method: "POST",
 
     headers: {
         "Content-Type": "application/json",
     },
-    body: JSON.stringify(donneEnvoyer),
+    body: JSON.stringify(donneEnvoyer)
   })  
   .then(function(repon){    
     console.log(repon);
-   localStorage.setItem("order", JSON.parse(repon).orderId);
-    
+    let reponseApi = JSON.parse(repon);
+    window.localStorage.setItem("orderId", reponseApi.orderId);    
   })
-  
-
- 
-  
- 
-
 });
 
 const dataLocaleStorage = localStorage.getItem("contact");
@@ -238,3 +215,5 @@ const dataLocaleStorage = localStorage.getItem("contact");
   remplirInpuTLocalStorage ('address');
   remplirInpuTLocalStorage ('city');
   remplirInpuTLocalStorage ('email');
+
+

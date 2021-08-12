@@ -61,7 +61,7 @@ fetch(`http://localhost:3000/api/cameras/${id}`)
     
       /****************local storage  *************************************/
 
-      let products =JSON.parse(localStorage.getItem("products"));
+      let products =JSON.parse(localStorage.getItem("produit"));
       const pomptConfirmation = ()=>{
         if(window.confirm( `${nameProduit} option : ${lentilles[lentillesChoisi]} a bien été rajouté au panier
         consulter le panier  OK  ou revenir à l'acceuil ANNULER`)){;
@@ -78,7 +78,7 @@ fetch(`http://localhost:3000/api/cameras/${id}`)
         }else{
           products[indexProduit].quantite += produitEnvoyerPanier.quantite;
         }                
-        localStorage.setItem("products", JSON.stringify(products));     // pensser a faire une fonction pour non repetition
+        localStorage.setItem("produit", JSON.stringify(products));     // pensser a faire une fonction pour non repetition
         
         pomptConfirmation(); 
       }     
@@ -87,7 +87,7 @@ fetch(`http://localhost:3000/api/cameras/${id}`)
         products =[];  
         products.push(produitEnvoyerPanier);
         
-        localStorage.setItem("products", JSON.stringify(products));
+        localStorage.setItem("produit", JSON.stringify(products));
         pomptConfirmation();
        
       };
