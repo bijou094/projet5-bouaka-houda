@@ -1,65 +1,97 @@
-// declaration duuuuu variable "article Enregidtrer Panier"////////////////////function produitDePanierCommander( idProduit, quantite, priceProduit, choixFormulaire,nomProduit){
-  let products =JSON.parse(localStorage.getItem("produit"))
+/*fonction pour ajouter les produit selectionner au dom
+ *création est ajout des elemnet de tableau *****************************/
+function addProduitStokPanier (idProduit, nameProduit, priceProduit, quantite, totalPayerProduit, lentillesChoisi ){
+  const nouveauProduitCommander = document.createElement('tr');  
+    nouveauProduitCommander.innerHTML=`   
+    <td scope="col " scope="row">${nameProduit}</td>
+    <td scope="col">${lentillesChoisi}</td>
+    <td  scope="col">${priceProduit}</td>
+    <td scope="col" >${quantite}</td>
+    <td scope="col" >${totalPayerProduit}</td>
+    <td scope="col"><button class="btn-supprimer bg-transparent border-0" value=${idProduit}><i class="bi bi-trash"></i></button></td>`
+    nouveauProduitCommander.setAttribute("scope", `row `);    
+document.querySelector(".ligneTableau").append(nouveauProduitCommander); 
+}
+/*******************************/
+function addFormulaire (){
+  const nouveauFormulaire  = document.createElement('form');   
+  nouveauFormulaire.innerHTML=  `
+    <div class="form-groups m-3 font-weight-bolder" >    
+      <label for="firstName"  > firstName : </label>
+      <input class="form-control  " type="text" id="firstName" name="firstName"  required > 
+    </div>
+    <div class="form-groups m-3 font-weight-bolder" >
+      <label for="lastName">lastName :</label>
+      <input class="form-control" type="text" id="lastName" name="lastName"  required >
+    </div>
+
+    <div class="form-groups m-3 font-weight-bolder" >
+       <label for="address">address:</label>
+      <input class="form-control" type="text"  name="address" id="address" required> 
+    </div>
+    <div class="form-groups m-3 font-weight-bolder" >
+      <label for="city">city:</label>
+      <input class="form-control" type="text" name="city" id="city" required>
+    </div >  
+    <div class="form-groups m-3 font-weight-bolder" >
+      <label for="email">email :</label>
+      <input class="form-control" type="email" name="email" id="email" placeholder="name@example.com" requered>
+    </div>
+    <div class=" m-3 d-flex  flex-column align-self-center">
+      <button  type="submit" id="btnEnvoyerFormulaire" name="btnEnvoyerFormulaire" class="btn btn-secondary font-weight-bolder m-1">Commander </button>
+    </div>
+  `   
+  nouveauFormulaire.setAttribute("class", ` formulaireContactServer bg-light  d-flex  flex-column align-items-center mb-3`);  
+  nouveauFormulaire.setAttribute("id", `from`);
+  document.querySelector(".formil").insertAdjacentElement("beforeend",nouveauFormulaire);
+  //document.querySelector(".formil").appendChild(nouveauFormulaire);  
+} 
+addFormulaire();
+ /********************************************************************* 
+ * Récupere les donne de  tableau des products qui sont dans le localstorage
+ * ajouter touts les proprietes des product recupré*********************************************/
+  let products =JSON.parse(localStorage.getItem("produit"));  
   if (products === null){
     alert("panier vide ");
   }else{
-    for (let k=0; k<products.length; k++){ 
+    for (let k=0; k<products.length; k++){      
+      addProduitStokPanier (products[k].idProduit, products[k].nomProduit, products[k].prixProduit,products[k].quantite, products[k].totalPayerProduit, products[k].lentillesChoisi ); 
+    }         
+  };
+ /**************************************************************
+  * calculer le montant total de la commande *****************************************/
+ let prisTotalCalcul=[];
+ for (let n=0; n < products.length; n++){        
+   let assembleLesPris =products[n].totalPayerProduit;//mesProduit[n].prixProduit;
+   prisTotalCalcul.push(assembleLesPris);
      
-      addProduitStokPanier (products[k].produits, products[k].nomProduit, products[k].prixProduit,products[k].quantite, products[k].totalPayerProduit, products[k].lentillesChoisi ); 
-    }  
-       
-  };     
-/////////////////////////////////////////////////////////////////
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/* 
-function addProduitStokPanier (idProduit, nameProduit, priceProduit, quantite, totalPayerProduit, lentillesChoisi ){
-  const nouveauProduitCommander = document.createElement('div');  
-  
-    nouveauProduitCommander.innerHTML=`
-      <div class="articleSelectionne ">
-        <div class=" row affichageNpq  d-flex flex-row justify-content-between">        
-          <span>name : ${nameProduit}</span>
-          <span>option:${lentillesChoisi}</span>
-          <span>prix : ${priceProduit}</span>
-          <span>quantite:${quantite}</span>                   
-          <span>prix total d'un produit:${totalPayerProduit}</span> 
-                    
-        </div> 
-        <button class="btn-supprimer" value=${idProduit}>supprimer<i class="bi bi-trash"></i></button>
-      </div> `
-  document.querySelector("#block-Panier").appendChild(nouveauProduitCommander);
-  
-}*/
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-// fonction pour ajouter les produit selectionner au dom
-// création est ajout des elemnet de tableau 
-
-function addProduitStokPanier (idProduit, nameProduit, priceProduit, quantite, totalPayerProduit, lentillesChoisi ){
-  const nouveauProduitCommander = document.createElement('tr');  
-  
-    nouveauProduitCommander.innerHTML=`     
-    <td  scope="row">${nameProduit}</td>
-    <td >${lentillesChoisi}</td>
-    <td >${priceProduit}</td>
-    <td >${quantite}</td>
-    <td >${totalPayerProduit}</td>
-    <td><button class="btn-supprimer" value=${idProduit}><i class="bi bi-trash"></i></button></td>      
-   `
-   
-  document.querySelector(".ligneTableau").appendChild(nouveauProduitCommander);  
-}
-///////////////////////////////////////////////////////boutton supprimer////////////////////////////////////////////////////////////
-// selectionner tout les 
-//supprimer le produit volu en click sur le boutton supprimer
-let btnSupprimer = document.querySelectorAll(".btn-supprimer");
-console.log(btnSupprimer);
-
+ }// addition avec reduce 
+ const reducer = (accumulator, currentValue) => accumulator + currentValue;
+ const totalCommande=prisTotalCalcul.reduce(reducer) ;
+ localStorage.setItem("prixTotalCommande", JSON.stringify(totalCommande)); 
+ // stoque la variable totalCommande dans localStorage
+/******************************************************************table-secondary
+ creer la ligne de tableau qui present le pris total de la commande et selection la div ligneTableau pour l'ajouter au DOM*************************/ 
+function addTotalCommande(){   
+ let  calculPrixTotalPanier = `
+  <tr scope=" row">
+  <td scope="col" colspan="4"><strong> total commande</strong> </td>
+  <td scope="col" colspan="2" class="  calculPrixTotalPanier" id="calculPrixTotalPanier"><strong> ${totalCommande}</strong></td>
+  </tr>`;
+  document.querySelector(".ligneTableau").insertAdjacentHTML("beforeend",calculPrixTotalPanier);  
+};
+  addTotalCommande();
+/************************************************************************************************************************************/
+ /*************************************************** 
+ * selectionner tout les boutton supprimer
+ * supprimer le produit volu en click sur le boutton supprimer*****************************************/
+function deleteProduit (){
+  let btnSupprimer = document.querySelectorAll(".btn-supprimer");
 for (let l =0; l<btnSupprimer.length; l++){
+
   btnSupprimer[l].addEventListener('click', (event)=> { 
     event.preventDefault();
+
     let choixSupprimer = products[l].idProduit; 
     let lentillesChoisi =products[l].lentillesChoisi;
     products = products.filter(el => (el.idProduit!==choixSupprimer || el.lentillesChoisi !== lentillesChoisi));
@@ -68,121 +100,113 @@ for (let l =0; l<btnSupprimer.length; l++){
     window.location.reload();        
   })
 }
-/////////////////////////////////////////// le prix total de la commande //////////////////////////////////////
-
-let prisTotalCalcul=[];
-
-for (let n=0; n < products.length; n++){        
-  let assembleLesPris =products[n].totalPayerProduit;//mesProduit[n].prixProduit;
-  prisTotalCalcul.push(assembleLesPris);
-    
-}// addition avec reduce 
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
-const prixTattal =prisTotalCalcul.reduce(reducer) ;
-
-let  calculPrixTotalPanier = `
-<tr class="table-secondary ">
-<td colspan="4">prix total de la commande </td>
-<td colspan="2" class="  calculPrixTotalPanier" id="calculPrixTotalPanier"> ${prixTattal}</td>
-</tr>`;
-//button.;
-document.querySelector(".ligneTableau").insertAdjacentHTML("beforeend",calculPrixTotalPanier);
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////boutton a vider panier ///////////////////////////////////////////////////////////////////////////
-
+}
+deleteProduit ();
+/*************************************************
+ * créé le boutton a vider panier
+ * ********/
 //insertion
+function addViderPanier(){
 let  nouveauButtonViderPanier = `
-<tr class="table-primary"  >
-<td colspan="6">
-<button class="btnViderPanier" id="btnViderPanier" >vider le panier</button></td>
+<tr scope="row" class="table-primary text-center mb-1"  >
+<td scope="col" colspan="12">    
+    <button class="btnViderPanier border-0  bg-transparent" id="btnViderPanier"><strong>vider le panier </strong></button>    
+</td>
 </tr>`;
 //button.;
 document.querySelector(".ligneTableau").insertAdjacentHTML("beforeend",nouveauButtonViderPanier);
+}
+addViderPanier();
 // selection le id 
+/*************************************************************************************************** */
+function getVidePanier(){
 nouveauButtonViderPanier = document.querySelector("#btnViderPanier");
-
 //selectionner les cles des produis de localstotege
 nouveauButtonViderPanier.addEventListener("click", (e)=>{
   e.preventDefault;
   // remove pour vider le panier 
-  localStorage.removeItem("produit"),alert(" le panier a été vidé");  
-    
-  window.location.reload();
-  
-})
+ 
+  localStorage.removeItem("produit"),  
+  alert(" le panier a été vidé");
+  window.location.href=" index.html"; 
+  window.Location.reload;   
+});
+}
+getVidePanier();
 /////////////////////////////////////////////////////le formulaire................................
-function addFormulaire (){
-  const nouveauFormulaire  = document.createElement('div');   
-  nouveauFormulaire.innerHTML=  `
-  
-  
-  <form  id="from" >                    
-    <div class="form-group">
-      <label for="firstName" > firstName : </label>
-      <input class="form-control" type="text" id="firstName" name="firstName" pattern="^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$" required > 
-    </div>
+function regExControleName (a){   
+  if(/^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$/.test(a)){    
+    return true;
+  }else{    
+    alert( `veuiller saisir que des lettres!!` );
+    return false;
+  }
+};
+function regExControleCity (b){   
+  if(/^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+)){1,10}$/.test(b)){    
+    return true;
+  }else{    
+    alert(`Veuillez saisir le champ !!
+    et ne pas depasser 20 caracteres`);
+    return false;
+  }
+}
+function regExControleEmail (c){ 
+  if(/^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([_\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,5})$/.test(c)){    
+    return true;
+  }else{    
+  alert("Veuillez saisir votre email au format demander ");
+    return false;
+  }
+}
 
-    <div class="form-group">
-      <label for="lastName">lastName :</label>
-      <input class="form-control" type="text" id="lastName" name="lastName" pattern="^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$" required >
-    </div>
+ 
 
-    <div class="form-group">
-      <label for="address">address:</label>
-      <input class="form-control" type="text"  name="address" id="address" required>                        
-    </div>
 
-    <div class="form-group">
-      <label for="city">city:</label>
-      <input class="form-control" type="text" name="city" id="city" pattern="^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+)){1,10}$" required>
-    </div>    
-
-    <div class="form-group">
-      <label for="email">email :</label>
-      <input class="form-control" type="email" name="email" id="email" placeholder="name@example.com" requered>
-    </div>
-    <button  type="submit" id="btnEnvoyerFormulaire" name="btnEnvoyerFormulaire">confirmer votre commande </button>
-
-  </form >`      
-  
-  document.querySelector(".formil").appendChild(nouveauFormulaire);  
-  
-} 
-
-addFormulaire();
 
 /////////////////////////////////////////////////////
 //selectionner le button commander
 const nouveauEnvoyerFormulaire = document.querySelector("#btnEnvoyerFormulaire");
-
 nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
   event.preventDefault(); 
-  
+  let products =JSON.parse(localStorage.getItem("produit"));
+   const productTable = [];
+  for (let v=0; v<products.length; v++){ 
+     
+   productTable.push(products[v].idProduit);
+  };  
   const contact ={
     firstName:document.querySelector("#firstName").value,
     lastName :document.querySelector("#lastName").value,
     address:document.querySelector("#address").value,
     city :document.querySelector("#city").value,    
     email:document.querySelector("#email").value
-  };
+  };  
+  regExControleName(contact.firstName);
+  regExControleName (contact.lastName);
+  regExControleCity (contact.adresse);
+  regExControleCity (contact.city);
+  regExControleEmail (contact.email);
+  if ((regExControleName(contact.firstName)===true) && (regExControleName (contact.lastName)===true) && (regExControleCity (contact.adresse) ===true) && (regExControleCity (contact.adresse) ===true) && (regExControleEmail (contact.email) ===true) ){
+    localStorage.setItem("contact",JSON.stringify(contact));
+    console.log("parfait");
+  }else{
+    alert("Veuillez bien remplir le formulaire");
+  }
+const  donneEnvoyer ={
+  contact :{
+    firstName:document.querySelector("#firstName").value,
+    lastName :document.querySelector("#lastName").value,
+    address:document.querySelector("#address").value,
+    city :document.querySelector("#city").value,    
+    email:document.querySelector("#email").value
+  },
+  products:productTable,
 
-  console.log(contact);
-  
-  localStorage.setItem("contact",JSON.stringify(contact));  
-  // le dossier a envoyer avec la requette
-    const  donneEnvoyer ={
-      contact:{
-         firstName :document.querySelector("#firstName").value,
-        lastName :document.querySelector("#lastName").value,
-        address:document.querySelector("#address").value,
-        city :document.querySelector("#city").value,    
-        email:document.querySelector("#email").value
-      },
-      products,    
-    };
-    console.log(donneEnvoyer);
-    localStorage.setItem("donneEnvoyer",JSON.stringify(donneEnvoyer));    
+};  
+ 
+    
+       
    
 // la requette 
   fetch("http://localhost:3000/api/cameras/order", {
@@ -191,21 +215,28 @@ nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
     headers: {
         "Content-Type": "application/json",
     },
-    body: JSON.stringify(donneEnvoyer)
-  })  
-  .then(function(repon){    
-    console.log(repon);
-    let reponseApi = JSON.parse(repon);
-    window.localStorage.setItem("orderId", reponseApi.orderId);    
+    body: JSON.stringify(donneEnvoyer),
   })
+  .then((response) => response.json())
+  .catch((erreur) => console.log("erreur : " + erreur))
+  
+  .then((data) => {
+    localStorage.setItem("order", JSON.stringify(data.orderId));
+    localStorage.removeItem("produit");
+    window.location.href= "order.html";   
+  });
 });
+  
+
+
+
+
+
+
 
 const dataLocaleStorage = localStorage.getItem("contact");
-    const dataLocaleStorageObjet = JSON.parse(dataLocaleStorage);
-    console.log(dataLocaleStorageObjet);
-
-    // mettre les caleur du localestorage dans les champs du formulaire 
-  
+const dataLocaleStorageObjet = JSON.parse(dataLocaleStorage);
+        // mettre les caleur du localestorage dans les champs du formulaire   
   function remplirInpuTLocalStorage(input){
     document.querySelector(`#${input}`).value = dataLocaleStorageObjet[input];
   };  
@@ -217,3 +248,4 @@ const dataLocaleStorage = localStorage.getItem("contact");
   remplirInpuTLocalStorage ('email');
 
 
+ 
