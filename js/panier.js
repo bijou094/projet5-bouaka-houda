@@ -173,13 +173,11 @@ nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
   let products =JSON.parse(localStorage.getItem("produit"));
    const productTable = [];
   for (let v=0; v<products.length; v++){      
-   productTable.push(products[v].idProduit);
-   if (productTable === null){
+   productTable.push(products[v].idProduit);   
+  }
+  if (productTable === null){
      alert("veuillez choisir un produit ");
      window.location.href=" index.html"; 
-   }
-
-   
   }; 
 
   const contact ={
