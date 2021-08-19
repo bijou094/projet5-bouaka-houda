@@ -53,6 +53,7 @@ addFormulaire();
   let products =JSON.parse(localStorage.getItem("produit"));  
   if (products === null){
     alert("panier vide ");
+    window.location.href=" index.html";
   }else{
     for (let k=0; k<products.length; k++){      
       addProduitStokPanier (products[k].idProduit, products[k].nomProduit, products[k].prixProduit,products[k].quantite, products[k].totalPayerProduit, products[k].lentillesChoisi ); 
@@ -171,10 +172,16 @@ nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
   event.preventDefault(); 
   let products =JSON.parse(localStorage.getItem("produit"));
    const productTable = [];
-  for (let v=0; v<products.length; v++){ 
-     
+  for (let v=0; v<products.length; v++){      
    productTable.push(products[v].idProduit);
-  };  
+   if (productTable === null){
+     alert("veuillez choisir un produit ");
+     window.location.href=" index.html"; 
+   }
+
+   
+  }; 
+
   const contact ={
     firstName:document.querySelector("#firstName").value,
     lastName :document.querySelector("#lastName").value,
