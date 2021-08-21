@@ -1,15 +1,12 @@
-//dériger vers la page en creeent le parametre de iurl avec le id de camera 
-
+//dériger vers la page en creeent le parametre de iurl avec le id de camera
 const queryString_url_id = window.location.search;
 const urlSearchParams = new  URLSearchParams(queryString_url_id);
 console.log(urlSearchParams);
 const id = urlSearchParams.get("id");
 console.log(id);
-
-
 /******************************************************************************************************************************* */
 //créé une fonction pour rajouter les information du camera selectionné au DOM
-function addProduit(nameProduit, priceProduit, imageUrlProduit, descriptionProduit){  
+function addOneCamera(nameProduit, priceProduit, imageUrlProduit, descriptionProduit){  
   const CameraSelectionne = document.createElement('article');    
   CameraSelectionne.innerHTML=`  
     <div class="card-img-top card-img-produit pb-3 mb-5">
@@ -24,7 +21,7 @@ function addProduit(nameProduit, priceProduit, imageUrlProduit, descriptionProdu
     <form class="p-2 font-weight-bolder d-flex flex-column   align-content-center">
       <div class=" form-group optionlentilles font-weight-bolder d-flex flex-row justify-content-between">
         <label for="optionlentilles"class="label label-default" > Lentille:</label>
-        <select class="form-control optionlentilles   selectTaille"  id="optionlentilles">                                                      
+        <select class="form-control optionlentilles  selectTaille"  id="optionlentilles">                                                      
         </select>
       </div>
       <div class="form-group d-flex flex-row justify-content-between font-weight-bolder">
@@ -40,6 +37,7 @@ function addProduit(nameProduit, priceProduit, imageUrlProduit, descriptionProdu
  document.querySelector(".contenairCameraSelectionner").appendChild(CameraSelectionne);
 }
 /************************************************************************************************************************** */
+//
 const pomptConfirmation = ()=>{
   if(window.confirm( 
     `la caméra a bien été rajouté au panier
@@ -67,6 +65,8 @@ if (products){
     products.push(produitEnvoyerPanier);
   }else{
     products[indexProduit].quantite += produitEnvoyerPanier.quantite;
+    products[indexProduit].totalPayerProduit = products[indexProduit].quantite * products[indexProduit].prixProduit;
+   
   }   
 
   localStorage.setItem("produit", JSON.stringify(products));    
@@ -80,10 +80,8 @@ if (products){
 };  
 }
 /******************************************************************************************************************************************** */
-
-
-/*********************************************************************************** */
-function getCamerasById(){
+//
+function getOneCamera(){
     fetch(`http://localhost:3000/api/cameras/${id}`)  
     .then (function(resp) {if (resp.ok) {return resp.json();}}) 
     .catch(function(err) {alert('Une erreur est survenue')})  
@@ -95,7 +93,7 @@ function getCamerasById(){
     let descriptionProduit = reponse.description;
     let imageUrlProduit = reponse.imageUrl; 
     
-    addProduit(nameProduit, priceProduit, imageUrlProduit, descriptionProduit);
+    addOneCamera(nameProduit, priceProduit, imageUrlProduit, descriptionProduit);
     let optionSelectProduct = reponse.lenses;    
     let lentilles =[]; 
     for (let j=0; j< optionSelectProduct.length; j++){
@@ -129,6 +127,6 @@ function getCamerasById(){
   })
    
 }   
-getCamerasById();
+getOneCamera();
 
 

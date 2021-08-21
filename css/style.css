@@ -44,8 +44,7 @@ h1{
 /*----------------------------debut bloc carte-----------------------------*/
 
 .card{
-   max-width: 90%;
-    min-width: 320px;               
+    width: 340px;                  
     height: 20rem;
     border-radius: 20px;  
 
@@ -60,6 +59,11 @@ h1{
     height:15rem;
 
 }
+.imageCameras{
+    width: 100%;    
+    object-fit: cover;
+}
+
 .card-body{
     border-radius:0 0 20px 20px ;
     background-color: rgb(238, 230, 230);
@@ -107,13 +111,7 @@ h1{
 }
 
 
- .bbbbb{
-    min-height: 700px;
-    min-width : 20 rem;
-    
-    border-radius: 20px;
-    background-color: rgb(209, 209, 209);
-}
+ 
 .form-group{
     width: 17rem;
 }
@@ -158,4 +156,7 @@ h1{
 .idenCommande{
     color: rgb(43, 10, 105);
     
+}
+.btnOrder{
+   background-color:#093a6f;
 }

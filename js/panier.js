@@ -12,7 +12,8 @@ function addProduitStokPanier (idProduit, nameProduit, priceProduit, quantite, t
     nouveauProduitCommander.setAttribute("scope", `row `);    
 document.querySelector(".ligneTableau").append(nouveauProduitCommander); 
 }
-/*******************************/
+/******************************
+//fonction pour ajouter les produit selectionner au dom *création est ajout des elemnet de tableau *****************************/
 function addFormulaire (){
   const nouveauFormulaire  = document.createElement('form');   
   nouveauFormulaire.innerHTML=  `
@@ -50,7 +51,9 @@ addFormulaire();
  /********************************************************************* 
  * Récupere les donne de  tableau des products qui sont dans le localstorage
  * ajouter touts les proprietes des product recupré*********************************************/
-  let products =JSON.parse(localStorage.getItem("produit"));  
+  let products
+ function getParametreProduct() {
+  products =JSON.parse(localStorage.getItem("produit"));  
   if (products === null){
     alert("panier vide ");
     window.location.href=" index.html";
@@ -58,22 +61,23 @@ addFormulaire();
     for (let k=0; k<products.length; k++){      
       addProduitStokPanier (products[k].idProduit, products[k].nomProduit, products[k].prixProduit,products[k].quantite, products[k].totalPayerProduit, products[k].lentillesChoisi ); 
     }         
-  };
- /**************************************************************
-  * calculer le montant total de la commande *****************************************/
- let prisTotalCalcul=[];
- for (let n=0; n < products.length; n++){        
-   let assembleLesPris =products[n].totalPayerProduit;//mesProduit[n].prixProduit;
-   prisTotalCalcul.push(assembleLesPris);
-     
- }// addition avec reduce 
- const reducer = (accumulator, currentValue) => accumulator + currentValue;
- const totalCommande=prisTotalCalcul.reduce(reducer) ;
- localStorage.setItem("prixTotalCommande", JSON.stringify(totalCommande)); 
- // stoque la variable totalCommande dans localStorage
+  };  
+}
+getParametreProduct();
 /******************************************************************table-secondary
  creer la ligne de tableau qui present le pris total de la commande et selection la div ligneTableau pour l'ajouter au DOM*************************/ 
 function addTotalCommande(){   
+  // calculer le montant total de la commande 
+let prisTotalCalcul=[];
+for (let n=0; n < products.length; n++){        
+  let assembleLesPris =products[n].totalPayerProduit;//mesProduit[n].prixProduit;
+  prisTotalCalcul.push(assembleLesPris);
+    
+}// addition avec reduce 
+const reducer = (accumulator, currentValue) => accumulator + currentValue;
+const totalCommande=prisTotalCalcul.reduce(reducer) ;
+localStorage.setItem("prixTotalCommande", JSON.stringify(totalCommande)); 
+// stoque la variable totalCommande dans localStorage
  let  calculPrixTotalPanier = `
   <tr scope=" row">
   <td scope="col" colspan="4"><strong> total commande</strong> </td>
@@ -130,7 +134,7 @@ nouveauButtonViderPanier.addEventListener("click", (e)=>{
   localStorage.removeItem("produit"),  
   alert(" le panier a été vidé");
   window.location.href=" index.html"; 
-  window.Location.reload;   
+    
 });
 }
 getVidePanier();
@@ -144,7 +148,7 @@ function regExControleName (a){
   }
 };
 function regExControleCity (b){   
-  if(/^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+)){1,10}$/.test(b)){    
+  if(/^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([0-9])|([a-zA-ZÀ-ÿ]+)){1,20}$/.test(b)){    
     return true;
   }else{    
     alert(`Veuillez saisir le champ !!
@@ -160,25 +164,17 @@ function regExControleEmail (c){
     return false;
   }
 }
-
- 
-
-
-
 /////////////////////////////////////////////////////
 //selectionner le button commander
 const nouveauEnvoyerFormulaire = document.querySelector("#btnEnvoyerFormulaire");
 nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
   event.preventDefault(); 
-  let products =JSON.parse(localStorage.getItem("produit"));
-   const productTable = [];
+  let products =JSON.parse(localStorage.getItem("produit"));  
+  productTable = [];
   for (let v=0; v<products.length; v++){      
-   productTable.push(products[v].idProduit);   
-  }
-  if (productTable === null){
-     alert("veuillez choisir un produit ");
-     window.location.href=" index.html"; 
-  }; 
+    productTable.push(products[v].idProduit); 
+  }     
+  
 
   const contact ={
     firstName:document.querySelector("#firstName").value,
@@ -187,17 +183,15 @@ nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
     city :document.querySelector("#city").value,    
     email:document.querySelector("#email").value
   };  
-  regExControleName(contact.firstName);
-  regExControleName (contact.lastName);
-  regExControleCity (contact.adresse);
-  regExControleCity (contact.city);
-  regExControleEmail (contact.email);
+  
   if ((regExControleName(contact.firstName)===true) && (regExControleName (contact.lastName)===true) && (regExControleCity (contact.adresse) ===true) && (regExControleCity (contact.adresse) ===true) && (regExControleEmail (contact.email) ===true) ){
     localStorage.setItem("contact",JSON.stringify(contact));
-    console.log("parfait");
+    
   }else{
     alert("Veuillez bien remplir le formulaire");
+    return false;
   }
+
 const  donneEnvoyer ={
   contact :{
     firstName:document.querySelector("#firstName").value,
@@ -209,11 +203,6 @@ const  donneEnvoyer ={
   products:productTable,
 
 };  
- 
-    
-       
-   
-// la requette 
   fetch("http://localhost:3000/api/cameras/order", {
     method: "POST",
 
@@ -229,23 +218,19 @@ const  donneEnvoyer ={
     localStorage.setItem("order", JSON.stringify(data.orderId));
     localStorage.removeItem("produit");
     window.location.href= "order.html";   
-  });
-});
+  });  
   
+   
+// la requette 
 
-
-
-
-
-
-
+});
+//
 const dataLocaleStorage = localStorage.getItem("contact");
 const dataLocaleStorageObjet = JSON.parse(dataLocaleStorage);
         // mettre les caleur du localestorage dans les champs du formulaire   
   function remplirInpuTLocalStorage(input){
     document.querySelector(`#${input}`).value = dataLocaleStorageObjet[input];
-  };  
-   
+  };    
   remplirInpuTLocalStorage("firstName");  
   remplirInpuTLocalStorage ('lastName');
   remplirInpuTLocalStorage ('address');
