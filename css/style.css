@@ -116,7 +116,8 @@ h1{
     width: 17rem;
 }
 .selectTaille{
-    max-width: 11rem;
+    width: 11rem;
+    
 }
 
 .btn{
