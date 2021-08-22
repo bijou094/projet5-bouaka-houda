@@ -3,12 +3,12 @@
 function addProduitStokPanier (idProduit, nameProduit, priceProduit, quantite, totalPayerProduit, lentillesChoisi ){
   const nouveauProduitCommander = document.createElement('tr');  
     nouveauProduitCommander.innerHTML=`   
-    <td scope="col " scope="row">${nameProduit}</td>
-    <td scope="col">${lentillesChoisi}</td>
-    <td  scope="col">${priceProduit}</td>
-    <td scope="col" >${quantite}</td>
-    <td scope="col" >${totalPayerProduit}</td>
-    <td scope="col"><button class="btn-supprimer bg-transparent border-0" value=${idProduit}><i class="bi bi-trash"></i></button></td>`
+    <td  scope="row">${nameProduit}</td>
+    <td >${lentillesChoisi}</td>
+    <td >${priceProduit}</td>
+    <td  >${quantite}</td>
+    <td  >${totalPayerProduit}</td>
+    <td ><button class="btn-supprimer bg-transparent border-0" value=${idProduit}><i class="bi bi-trash"></i></button></td>`
     nouveauProduitCommander.setAttribute("scope", `row `);    
 document.querySelector(".ligneTableau").append(nouveauProduitCommander); 
 }
@@ -18,24 +18,24 @@ function addFormulaire (){
   const nouveauFormulaire  = document.createElement('form');   
   nouveauFormulaire.innerHTML=  `
     <div class="form-groups m-3 font-weight-bolder" >    
-      <label for="firstName"  > firstName : </label>
+      <label for="firstName"  > Nom : </label>
       <input class="form-control  " type="text" id="firstName" name="firstName"  required > 
     </div>
     <div class="form-groups m-3 font-weight-bolder" >
-      <label for="lastName">lastName :</label>
+      <label for="lastName">Prénom :</label>
       <input class="form-control" type="text" id="lastName" name="lastName"  required >
     </div>
 
     <div class="form-groups m-3 font-weight-bolder" >
-       <label for="address">address:</label>
+       <label for="address">Addresse:</label>
       <input class="form-control" type="text"  name="address" id="address" required> 
     </div>
     <div class="form-groups m-3 font-weight-bolder" >
-      <label for="city">city:</label>
+      <label for="city">Ville:</label>
       <input class="form-control" type="text" name="city" id="city" required>
     </div >  
     <div class="form-groups m-3 font-weight-bolder" >
-      <label for="email">email :</label>
+      <label for="email">Email :</label>
       <input class="form-control" type="email" name="email" id="email" placeholder="name@example.com" requered>
     </div>
     <div class=" m-3 d-flex  flex-column align-self-center">
@@ -79,9 +79,9 @@ const totalCommande=prisTotalCalcul.reduce(reducer) ;
 localStorage.setItem("prixTotalCommande", JSON.stringify(totalCommande)); 
 // stoque la variable totalCommande dans localStorage
  let  calculPrixTotalPanier = `
-  <tr scope=" row">
-  <td scope="col" colspan="4"><strong> total commande</strong> </td>
-  <td scope="col" colspan="2" class="  calculPrixTotalPanier" id="calculPrixTotalPanier"><strong> ${totalCommande}</strong></td>
+  <tr>
+  <td colspan="4"><strong> total commande</strong> </td>
+  <td  colspan="2" class="  calculPrixTotalPanier" id="calculPrixTotalPanier"><strong> ${totalCommande}</strong></td>
   </tr>`;
   document.querySelector(".ligneTableau").insertAdjacentHTML("beforeend",calculPrixTotalPanier);  
 };
@@ -138,7 +138,7 @@ nouveauButtonViderPanier.addEventListener("click", (e)=>{
 });
 }
 getVidePanier();
-/////////////////////////////////////////////////////le formulaire................................
+/*********fonction pour valider les champs de saisie du formulaire */
 function regExControleName (a){   
   if(/^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$/.test(a)){    
     return true;
@@ -175,7 +175,7 @@ nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
     productTable.push(products[v].idProduit); 
   }     
   
-
+  // Créé l'oblet contact a envoyer pour la commande
   const contact ={
     firstName:document.querySelector("#firstName").value,
     lastName :document.querySelector("#lastName").value,
@@ -183,7 +183,7 @@ nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
     city :document.querySelector("#city").value,    
     email:document.querySelector("#email").value
   };  
-  
+  //vérifier si tout les champs sont valide pour envoyer le formulaire
   if ((regExControleName(contact.firstName)===true) && (regExControleName (contact.lastName)===true) && (regExControleCity (contact.adresse) ===true) && (regExControleCity (contact.adresse) ===true) && (regExControleEmail (contact.email) ===true) ){
     localStorage.setItem("contact",JSON.stringify(contact));
     
@@ -191,7 +191,7 @@ nouveauEnvoyerFormulaire.addEventListener("click", (event)=>{
     alert("Veuillez bien remplir le formulaire");
     return false;
   }
-
+// créé un objet pour envoyer les caméras dans le panier et le formulaire de contact validé
 const  donneEnvoyer ={
   contact :{
     firstName:document.querySelector("#firstName").value,
@@ -202,7 +202,8 @@ const  donneEnvoyer ={
   },
   products:productTable,
 
-};  
+}; 
+// faire une requête fetch avec la methode poste pour récuperé l'order(numéro de la commande ) de la commnde  
   fetch("http://localhost:3000/api/cameras/order", {
     method: "POST",
 
@@ -215,13 +216,12 @@ const  donneEnvoyer ={
   .catch((erreur) => console.log("erreur : " + erreur))
   
   .then((data) => {
+    //Dés la commande passer stock le numéro dans le locale storage et on supprime l'objet produit
     localStorage.setItem("order", JSON.stringify(data.orderId));
     localStorage.removeItem("produit");
     window.location.href= "order.html";   
   });  
-  
-   
-// la requette 
+ 
 
 });
 //

@@ -26,16 +26,13 @@ h1{
     position: absolute;
     font-weight: 900;
     text-align: center;
-   font-size: 25px;
+    font-size: 25px;
     font-family: "Shrikhand", sans-serif;
     width: 100%;
     color: #ffffff;
 }
-.titrePanier{
-    font-size:18 px;
-    font-family: "Shrikhand", sans-serif;
-}
-.titreH2, .logo{
+
+.titreH2, .logo, .titrePanier{
     font-size: 25px;
     font-family: "Shrikhand", sans-serif;
 }

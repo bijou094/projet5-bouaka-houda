@@ -1,8 +1,8 @@
-// fonction fetch pour recuperer les donne dans le serveur
+// fonction fetch pour envoyé une requête avec la methode get / recuperer les donne dans le serveur 
 function getAllCameras(){
   fetch(`http://localhost:3000/api/cameras`)
   .then(function(res) {
-    if (res.ok){
+    if (res.ok){ 
       return res.json();
     }
   })

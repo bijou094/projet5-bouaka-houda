@@ -1,4 +1,4 @@
-//dériger vers la page en creeent le parametre de iurl avec le id de camera
+//dériger vers la page / le parametre de iurl avec le id de camera
 const queryString_url_id = window.location.search;
 const urlSearchParams = new  URLSearchParams(queryString_url_id);
 console.log(urlSearchParams);
@@ -20,7 +20,7 @@ function addOneCamera(nameProduit, priceProduit, imageUrlProduit, descriptionPro
               
     <form class="p-2 font-weight-bolder d-flex flex-column   align-content-center">
       <div class=" form-group optionlentilles font-weight-bolder d-flex flex-row justify-content-between">
-        <label for="optionlentilles"class="label label-default" > Lentille:</label>
+        <label for="optionlentilles"class="label label-default" > Lentilles:</label>
         <select class="form-control optionlentilles  selectTaille"  id="optionlentilles">                                                      
         </select>
       </div>
@@ -29,15 +29,14 @@ function addOneCamera(nameProduit, priceProduit, imageUrlProduit, descriptionPro
         <input type="number" class="form-control-number quantite selectTaille " id="quantite" value="1"  min="1" max="10" required>
       </div>
       <div class=" groupButton m-3 d-flex flex-column align-items-center  flex-lg-row  justify-content-lg-between" >
-        <a class="btn btn-primary   m-1" href="./index.html" role="button">Retour à l'acceuil</a>
+        <a class="btn btn-primary   m-1" href="./index.html" role="button">Retour à l'accueil</a>
         <button id="btn-envoyer" type="submit" name="btn-envoyer" class="btn btn-primary  m-1">Ajouter au panier</button>
       </div>
     </form>`
     CameraSelectionne.setAttribute("class", `carte-Produit m-3  d-flex  flex-column align-content-between`);
  document.querySelector(".contenairCameraSelectionner").appendChild(CameraSelectionne);
 }
-/************************************************************************************************************************** */
-//
+/**********************************créée une boite de dialogue **************************************************************************************** */
 const pomptConfirmation = ()=>{
   if(window.confirm( 
     `la caméra a bien été rajouté au panier
@@ -48,7 +47,7 @@ const pomptConfirmation = ()=>{
     window.location.href=" index.html";
   }
 };
-/**************************************************** */
+/**************** cree et ajouter l'option dans la balise <select>************************************ */
 function addOptionlentilles (j, choixOptionlentilles ){
    const nouveauOption = document.createElement('option');    
   nouveauOption.innerHTML=
@@ -56,7 +55,7 @@ function addOptionlentilles (j, choixOptionlentilles ){
   nouveauOption.setAttribute("value", `${j}`);
   document.querySelector("#optionlentilles").appendChild( nouveauOption );
 }
-/**************************************************************** */
+/*******************************stoker les donne dans le locale storage********************************* */
 function addLocaleStorage(produitEnvoyerPanier){
 let products =JSON.parse(localStorage.getItem("produit"));      
 if (products){
@@ -80,7 +79,7 @@ if (products){
 };  
 }
 /******************************************************************************************************************************************** */
-//
+// enoyer une requête avec fetch /methode get /récuperer les donne par leus id
 function getOneCamera(){
     fetch(`http://localhost:3000/api/cameras/${id}`)  
     .then (function(resp) {if (resp.ok) {return resp.json();}}) 
